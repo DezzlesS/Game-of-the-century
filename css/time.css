@@ -1,0 +1,14 @@
+.time-wrapper {
+    width: 70%;
+}
+
+.time {
+    width: 40%;
+    margin: 10px auto 25px auto;
+    background-color: rgb(241, 241, 241);
+    font: bold 2.5em Calibri;
+    color: #2f2f2f;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 5px;
+}

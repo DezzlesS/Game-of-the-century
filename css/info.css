@@ -1,0 +1,40 @@
+.score-wrapper {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: white;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    border-radius: 4px;
+    font: 1.1em Bahnschrift;
+    line-height: 1.2;
+    color: #3a3737;
+    text-align: center;
+    user-select: text;
+}
+
+.score-caption {
+    width: 40%;
+    padding: 6% 0 5% 0;
+    box-sizing: border-box;
+    background-color: rgb(255, 247, 236);
+    border-right: 2px solid black;
+}
+
+.info-number {
+    display: flex;
+    align-items: center;
+    padding-top: 2%;
+    margin: 0 auto;
+    font: 1000 1.4em Bahnschrift;
+    letter-spacing: 1px;
+}
+
+.next-refresh-caption {
+    width: 65%;
+    padding: 21px 12px 15px 12px;
+    font-size: 1.2em;
+}
+
+.next-refresh-wrapper {
+    padding: 10px 12px 16px 12px;
+}

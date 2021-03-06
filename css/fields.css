@@ -1,0 +1,106 @@
+.fields {
+    width: 100%;
+    padding: 3%;
+    background-color: #161616;
+    border: 3px solid black;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font: 0.9em Calibri;
+    margin: auto;
+}
+
+.field-row {
+    display: flex;
+}
+
+.field-item {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding-top: 0.5%;
+    margin: 1px;
+    background-color: white;
+    border: 3px solid transparent;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.field-item:hover {
+    font: bold 0.9em Calibri;
+    border-color: black;
+}
+
+.colorized {
+    transition: background 0.3s;
+    font: bold 1em Calibri;
+}
+
+.colorized:hover {
+    border-style: none;
+    font-size: 1em;
+}
+
+.colorized:active {
+    font-size: 0.9em;
+}
+
+.colorize-max {
+    background-color: rgb(153, 202, 248);
+}
+
+.colorize-red {
+    background-color: #f37a61
+}
+
+.colorize-yellow {
+    background-color: #ffe598
+}
+
+.colorize-green {
+    background-color: #b5d89e
+}
+
+.colorize-white {
+    background-color: #dadada
+}
+
+.colorize-dark {
+    color: rgb(223, 88, 75);
+    background-color: #383838;
+}
+
+.colorize-black {
+    background-color: #101010;
+}
+
+.colorize-dark:active {
+    font-size: 0.9em;
+    color: rgb(112, 9, 0);
+    background-color: #ff0000;
+}
+
+
+/* 
+.colorize-max:active {
+    background-color: rgb(105, 177, 245);
+}
+
+.colorize-red:active {
+    background-color: #c54c34
+}
+
+.colorize-yellow:active {
+    background-color: #e2bb45
+}
+
+.colorize-green:active {
+    background-color: #70a54d
+}
+
+.colorize-white:active {
+    background-color: #aaaaaa
+} */
