@@ -8,26 +8,28 @@ const score = document.querySelector(".score-number");
 
 const field_Items = [];
 
+let feildComplete = 0
+
 
 function Event_Click() {
     addEventListener("mousedown", (e) => {
 
         let classIndex = "";
 
-        console.log(["field-item", "refresh"]
-            .some((className, index) => {
-                if (e.target.classList.contains(className)) {
-                    classIndex = index;
-                    return;
-                }
-            }))
+        ["field-item", "refresh"]
+        .some((className, index) => {
+            if (e.target.classList.contains(className)) {
+                classIndex = index;
+                return;
+            }
+        })
 
         switch (classIndex) {
             case 0:
                 Field_Click(e.target)
                 break;
             case 1:
-                Refresh_Values();
+                Refresh_Values(false);
                 break;
         }
     })
@@ -94,21 +96,18 @@ function Create_Values() {
             field_Items[q] = field_item;
             q++;
 
-            // if (Number.isInteger(c / 10)) {
-            //     field_item.classList.add("colorize-red");
-            //     q += 1;
-            // }
-            // score.innerHTML = q;
+            if (Number.isInteger(c / 10)) feildComplete++;
+
         }
     }
     Refresh_Values(true);
-    Refresh_Width();
+    Refresh_Width(true);
 }
 
 
 let timeOut = false;
 
-function Refresh_Values() {
+function Refresh_Values(load) {
 
     if (timeOut) return;
     timeOut = true;
@@ -120,18 +119,26 @@ function Refresh_Values() {
     let i2 = 0;
 
 
+
     Refresh_Colorize(field_Items[0]);
 
     function Refresh_Colorize(Item_Colorize) {
 
         Item_Colorize.classList.add(Colorize(Item_Colorize.innerHTML))
 
-        if (i2 >= 99) setTimeout(Refresh, 300, field_Items[i1]);
-        else {
-            i2++;
-            Refresh_Colorize(field_Items[i2]);
+        if (i1 >= 99) {
+            if (load) setTimeout(Refresh, 300, field_Items[i2]);
+        } else {
+            i1++;
+            Refresh_Colorize(field_Items[i1]);
         }
     }
+
+    addEventListener("mouseup", e => {
+        if (e.target === document.querySelector(".refresh"))
+            setTimeout(Refresh, 200, field_Items[i2])
+        console.log("mouseup");
+    })
 
     function Refresh(Item) {
 
@@ -143,13 +150,12 @@ function Refresh_Values() {
             Item.classList.remove(Item.classList[0]);
         }
 
-
         Item.classList.add("field-item");
 
-        if (i1 >= 99) return;
+        if (i2 > 99) return;
         else {
-            i1++;
-            setTimeout(Refresh, 0, field_Items[i1]);
+            i2++;
+            setTimeout(Refresh, 0, field_Items[i2]);
         }
     }
 
