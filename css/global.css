@@ -19,6 +19,13 @@ body {
     height: 100%;
 }
 
+.global-wrapper {
+    width: 100%;
+    height: 100vh;
+    min-width: 505px;
+    min-height: fit-content;
+}
+
 .top-Border {
     background-color: #161616;
     height: 7%;

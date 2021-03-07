@@ -1,17 +1,23 @@
 const fields = document.querySelector(".fields");
-const field_rows = []
+const fieldRows = []
 
 const global_Scale_Elem = document.querySelector(".main-wrapper");
 const scale_Elem = document.querySelector(".scale");
 
 const score = document.querySelector(".score-number");
 
-const field_Items = [];
+const fieldItems = [];
 
-let feildComplete = 0
+let multipleFieldsTotal = 0;
+let multipleFieldCount = 0;
+
+let scoreIterator = 1;
 
 
-function Event_Click() {
+
+
+
+function Event_Read() {
     addEventListener("mousedown", (e) => {
 
         let classIndex = "";
@@ -36,83 +42,59 @@ function Event_Click() {
 }
 
 
-function Field_Click(targetField) {
-
-    if (["colorize-max", "colorize-red", "colorize-yellow", "colorize-green", "colorize-white"]
-        .some((colorizeClass) => targetField.classList.contains(colorizeClass))) return;
 
 
-    let fieldNumber = Math.abs(+targetField.innerHTML);
-    scoreNumber = +score.innerHTML;
 
+function Score_Set(nextScore, Points, increment) {
 
-    fieldNumberInt = Number.isInteger(fieldNumber / 10);
+    nextScore += increment;
+    score.innerHTML = nextScore;
 
-    if (!fieldNumberInt) targetField.innerHTML = -fieldNumber;
-
-    let i = 0;
-    increment = fieldNumberInt ? 1 : -1;
-    Score_Set(fieldNumber);
-
-    function Score_Set(num) {
-        scoreNumber += increment;
-
-        score.innerHTML = scoreNumber;
-        // (+targetField.innerHTML) += increment;
-
-        if (i > num) return;
-        else {
-            i++;
-            setTimeout(Score_Set, 5, num);
-        }
+    if (scoreIterator >= Points) {
+        scoreIterator = 0;
+    } else {
+        scoreIterator++;
+        setTimeout(Score_Set, 7, nextScore, Points, increment);
     }
-
-    targetField.classList.add(Colorize(fieldNumber, fieldNumberInt), "colorized")
-
-
 }
 
+function Create_Fields() {
 
-
-function Create_Values() {
-
-    let q = 0
+    let q = 0;
 
     for (let rowI = 0; rowI < 10; rowI++) {
 
-        field_row = document.createElement("div");
-        field_row.className = "field-row";
-        fields.appendChild(field_row)
+        fieldRow = document.createElement("div");
+        fieldRow.className = "field-row";
+        fields.appendChild(fieldRow)
 
-        field_rows[rowI] = field_row;
+        fieldRows[rowI] = fieldRow;
 
         for (let rowItem = 0; rowItem < 10; rowItem++) {
 
-            field_item = document.createElement("div");
-            field_item.className = "field-item";
-            field_row.appendChild(field_item);
+            fieldItem = document.createElement("div");
+            fieldItem.className = "field-item";
+            fieldRow.appendChild(fieldItem);
 
-            c = Math.floor(Math.random() * (101 - 1)) + 1;
-            field_Items[q] = field_item;
+            fieldItems[q] = [fieldItem, 0, 0];
             q++;
-
-            if (Number.isInteger(c / 10)) feildComplete++;
-
         }
     }
     Refresh_Values(true);
-    Refresh_Width(true);
+    Set_Width(true);
 }
 
 
-let timeOut = false;
+
+
+
+// let timeOut1 = false;
+// let timeOut2 = false;
 
 function Refresh_Values(load) {
 
-    if (timeOut) return;
-    timeOut = true;
-
-    score.innerHTML = 0;
+    // if (timeOut1) return;
+    // timeOut1 = true;
 
     let c = 0;
     let i1 = 0;
@@ -120,30 +102,50 @@ function Refresh_Values(load) {
 
 
 
-    Refresh_Colorize(field_Items[0]);
+    Refresh_Colorize(fieldItems[0]);
 
-    function Refresh_Colorize(Item_Colorize) {
+    function Refresh_Colorize(Field) {
 
-        Item_Colorize.classList.add(Colorize(Item_Colorize.innerHTML))
+        const Item = Field[0];
+        const ItemValue = load ? "" : Field[1];
+        const isMultiple = Field[2];
+
+        Item.classList.add(Colorize(ItemValue, isMultiple))
 
         if (i1 >= 99) {
-            if (load) setTimeout(Refresh, 300, field_Items[i2]);
+            if (load) setTimeout(Refresh, 300, fieldItems[0][0]);
         } else {
             i1++;
-            Refresh_Colorize(field_Items[i1]);
+            Refresh_Colorize(fieldItems[i1]);
         }
     }
 
     addEventListener("mouseup", e => {
-        if (e.target === document.querySelector(".refresh"))
-            setTimeout(Refresh, 200, field_Items[i2])
-        console.log("mouseup");
+        if (e.target === document.querySelector(".refresh")) {
+
+            // if (timeOut2) return;
+            // else timeOut2 = true
+
+            i2 = 0
+
+            setTimeout(Refresh, 200, fieldItems[0][0]);
+        }
     })
 
     function Refresh(Item) {
 
-        c = Math.floor(Math.random() * (101 - 1)) + 1;
+        let c = Math.floor(Math.random() * (101 - 1)) + 1;
+        const isMultipleOfTen = Number.isInteger(c / 10);
+
+        if (isMultipleOfTen) {
+            multipleFieldsTotal++;
+        }
+
         Item.innerHTML = c;
+
+        fieldItems[i2][1] = c;
+        fieldItems[i2][2] = isMultipleOfTen;
+
 
         let ItemLength = Item.classList.length
         for (let i = 0; i < ItemLength; i++) {
@@ -155,18 +157,21 @@ function Refresh_Values(load) {
         if (i2 > 99) return;
         else {
             i2++;
-            setTimeout(Refresh, 0, field_Items[i2]);
+            setTimeout(Refresh, 0, fieldItems[i2][0]);
         }
+        // setTimeout(() => timeOut1 = false, 1000);
+        // setTimeout(() => timeOut2 = false, 1000);
     }
-
-
-    setTimeout(() => timeOut = false, 850);
 }
 
-function Colorize(val) {
+
+
+
+function Colorize(val, isMultiple) {
 
     if (val === "") return "colorize-black";
-    if (Number.isInteger(val / 10)) {
+    if (isMultiple || Number.isInteger(val / 10)) {
+
         return (val === 100) ? "colorize-max" :
             (val >= 75) ? "colorize-red" :
             (val >= 40) ? "colorize-yellow" :
@@ -175,15 +180,49 @@ function Colorize(val) {
     } else return "colorize-dark";
 }
 
-function Refresh_Width() {
+
+
+
+function Set_Width() {
 
     rowHeight = fields.offsetWidth / 10 - 5 + "px";
 
-    field_rows.forEach(row => {
-
+    fieldRows.forEach(row => {
         row.style.height = rowHeight
     });
 }
+
+
+
+
+
+
+function Field_Click(targetField) {
+
+    if (["colorize-max", "colorize-red", "colorize-yellow", "colorize-green", "colorize-white"]
+        .some((colorizeClass) => targetField.classList.contains(colorizeClass))) return;
+
+
+    let fieldDigit = Math.abs(+targetField.innerHTML);
+    multipleFieldConfirm = Number.isInteger(fieldDigit / 10);
+
+    if (multipleFieldConfirm) multipleFieldCount++;
+    else targetField.innerHTML = -fieldDigit;
+
+    targetField.classList.add(Colorize(fieldDigit, multipleFieldConfirm), "colorized")
+
+    scoreDigit = +score.innerHTML;
+    Score_Set(scoreDigit, fieldDigit, Iterator(multipleFieldConfirm));
+
+    function Iterator(isMultiple) {
+        return isMultiple ? 1 : -1;
+    }
+
+
+    if (multipleFieldCount === multipleFieldsTotal) Refresh_Values(true);
+}
+
+
 
 
 function Scale(val) {
@@ -194,5 +233,6 @@ function Scale(val) {
     Refresh_Width()
 }
 
-Event_Click();
-Create_Values();
+
+Event_Read();
+Create_Fields();
