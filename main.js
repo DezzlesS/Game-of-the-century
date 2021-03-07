@@ -81,7 +81,7 @@ function Create_Fields() {
         }
     }
     Refresh_Values(true);
-    Set_Width(true);
+    Set_Width();
 }
 
 
@@ -230,7 +230,7 @@ function Scale(val) {
 
     fields.style.fontSize = val / 115 + "em";
 
-    Refresh_Width()
+    Set_Width()
 }
 
 
