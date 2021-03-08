@@ -1,149 +1,151 @@
 const fields = document.querySelector(".fields");
-const field_rows = []
+const fieldRows = []
+
+const startButton = document.querySelector(".start");
 
 const global_Scale_Elem = document.querySelector(".main-wrapper");
 const scale_Elem = document.querySelector(".scale");
 
 const score = document.querySelector(".score-number");
 
-const field_Items = [];
+const fieldItems = [];
 
-let feildComplete = 0
+const time = document.querySelector(".time");
+
+let multipleFieldsTotal = 0;
+let multipleFieldCount = 0;
 
 
-function Event_Click() {
+
+
+
+
+function Event_Read() {
     addEventListener("mousedown", (e) => {
 
-        let classIndex = "";
-
-        ["field-item", "refresh"]
-        .some((className, index) => {
-            if (e.target.classList.contains(className)) {
-                classIndex = index;
-                return;
-            }
-        })
-
-        switch (classIndex) {
-            case 0:
-                Field_Click(e.target)
-                break;
-            case 1:
-                Refresh_Values(false);
-                break;
-        }
+        if (e.target.classList.contains("field-item")) Field_Click(e.target);
+        if (e.target.classList.contains("reset")) Refresh_Values(false);
     })
 }
 
 
-function Field_Click(targetField) {
-
-    if (["colorize-max", "colorize-red", "colorize-yellow", "colorize-green", "colorize-white"]
-        .some((colorizeClass) => targetField.classList.contains(colorizeClass))) return;
 
 
-    let fieldNumber = Math.abs(+targetField.innerHTML);
-    scoreNumber = +score.innerHTML;
 
 
-    fieldNumberInt = Number.isInteger(fieldNumber / 10);
 
-    if (!fieldNumberInt) targetField.innerHTML = -fieldNumber;
 
-    let i = 0;
-    increment = fieldNumberInt ? 1 : -1;
-    Score_Set(fieldNumber);
 
-    function Score_Set(num) {
-        scoreNumber += increment;
+function Run() {
 
-        score.innerHTML = scoreNumber;
-        // (+targetField.innerHTML) += increment;
+    startButton.disabled = true;
 
-        if (i > num) return;
-        else {
-            i++;
-            setTimeout(Score_Set, 5, num);
-        }
-    }
+    Reset();
 
-    targetField.classList.add(Colorize(fieldNumber, fieldNumberInt), "colorized")
+    setTimeout(Refresh_Values, 600, true, true, false);
 
+    timeReset = false;
+    setTimeout(TimerInitialize, 1000, false);
+}
+
+function Reset() {
+    Refresh_Values(false, false, true)
+    Score_Initialize(-totalScore, true);
+    TimerInitialize(true);
 
 }
 
 
 
-function Create_Values() {
 
-    let q = 0
+
+
+function Create_Fields() {
+
+    let q = 0;
 
     for (let rowI = 0; rowI < 10; rowI++) {
 
-        field_row = document.createElement("div");
-        field_row.className = "field-row";
-        fields.appendChild(field_row)
+        fieldRow = document.createElement("div");
+        fieldRow.className = "field-row";
+        fields.appendChild(fieldRow)
 
-        field_rows[rowI] = field_row;
+        fieldRows[rowI] = fieldRow;
 
         for (let rowItem = 0; rowItem < 10; rowItem++) {
 
-            field_item = document.createElement("div");
-            field_item.className = "field-item";
-            field_row.appendChild(field_item);
+            fieldItem = document.createElement("div");
+            // fieldItem.className = "field-item";
+            fieldRow.appendChild(fieldItem);
 
-            c = Math.floor(Math.random() * (101 - 1)) + 1;
-            field_Items[q] = field_item;
+            fieldItems[q] = [fieldItem, 0, 0];
             q++;
-
-            if (Number.isInteger(c / 10)) feildComplete++;
-
         }
     }
-    Refresh_Values(true);
-    Refresh_Width(true);
+    Set_Width();
 }
 
+// let timeOut1 = false;
+// let timeOut2 = false;
 
-let timeOut = false;
+function Refresh_Values(load, doRefreshValues, deleteValues) {
 
-function Refresh_Values(load) {
+    // if (timeOut1) return;
+    // timeOut1 = true;
 
-    if (timeOut) return;
-    timeOut = true;
-
-    score.innerHTML = 0;
-
-    let c = 0;
     let i1 = 0;
     let i2 = 0;
+    let i3 = 0;
+
+    if (load) doRefreshValues = true;
+
+    multipleFieldsTotal = 0;
+    multipleFieldCount = 0;
 
 
+    Refresh_Colorize(fieldItems[0]);
 
-    Refresh_Colorize(field_Items[0]);
+    function Refresh_Colorize(Field) {
 
-    function Refresh_Colorize(Item_Colorize) {
+        const Item = Field[0];
+        const ItemValue = load ? "" : Field[1];
+        const isMultiple = Field[2];
 
-        Item_Colorize.classList.add(Colorize(Item_Colorize.innerHTML))
+        Item.classList.add(Colorize(ItemValue, isMultiple))
 
         if (i1 >= 99) {
-            if (load) setTimeout(Refresh, 300, field_Items[i2]);
+            if (deleteValues) setTimeout(Delete, 300, fieldItems[0][0]);
+            else if (doRefreshValues) setTimeout(Refresh, 300, fieldItems[0][0]);
         } else {
             i1++;
-            Refresh_Colorize(field_Items[i1]);
+            Refresh_Colorize(fieldItems[i1]);
         }
     }
 
-    addEventListener("mouseup", e => {
-        if (e.target === document.querySelector(".refresh"))
-            setTimeout(Refresh, 200, field_Items[i2])
-        console.log("mouseup");
-    })
+    // refreshButton.addEventListener("mouseup", () => {
+
+    //     // if (timeOut2) return;
+    //     // else timeOut2 = true
+
+    //     i2 = 0
+
+    //     setTimeout(Refresh, 200, fieldItems[0][0]);
+
+    // })
 
     function Refresh(Item) {
 
-        c = Math.floor(Math.random() * (101 - 1)) + 1;
+        let c = Math.floor(Math.random() * (101 - 1)) + 1;
+        const isMultipleOfTen = Number.isInteger(c / 10);
+
+        if (isMultipleOfTen) multipleFieldsTotal++;
+
+
         Item.innerHTML = c;
+
+        fieldItems[i2][1] = c;
+        fieldItems[i2][2] = isMultipleOfTen;
+
 
         let ItemLength = Item.classList.length
         for (let i = 0; i < ItemLength; i++) {
@@ -155,18 +157,39 @@ function Refresh_Values(load) {
         if (i2 > 99) return;
         else {
             i2++;
-            setTimeout(Refresh, 0, field_Items[i2]);
+            setTimeout(Refresh, 0, fieldItems[i2][0]);
         }
+        // setTimeout(() => timeOut1 = false, 1000);
+        // setTimeout(() => timeOut2 = false, 1000);
     }
 
+    function Delete(Item) {
+        Item.innerHTML = "";
 
-    setTimeout(() => timeOut = false, 850);
+
+        let ItemLength = Item.classList.length
+        for (let i = 0; i < ItemLength; i++) {
+            Item.classList.remove(Item.classList[0]);
+        }
+
+        // Item.classList.add("field-item");
+
+        if (i3 > 99) return;
+        i3++;
+        setTimeout(Delete, 5, fieldItems[i3][0])
+    }
+
 }
 
-function Colorize(val) {
+
+
+
+
+function Colorize(val, isMultiple) {
 
     if (val === "") return "colorize-black";
-    if (Number.isInteger(val / 10)) {
+    if (isMultiple || Number.isInteger(val / 10)) {
+
         return (val === 100) ? "colorize-max" :
             (val >= 75) ? "colorize-red" :
             (val >= 40) ? "colorize-yellow" :
@@ -175,14 +198,147 @@ function Colorize(val) {
     } else return "colorize-dark";
 }
 
-function Refresh_Width() {
+
+function Set_Width() {
 
     rowHeight = fields.offsetWidth / 10 - 5 + "px";
 
-    field_rows.forEach(row => {
-
+    fieldRows.forEach(row => {
         row.style.height = rowHeight
     });
+}
+
+
+
+
+
+
+
+
+
+
+function Field_Click(targetField) {
+
+    if (["colorize-max", "colorize-red", "colorize-yellow", "colorize-green", "colorize-white"]
+        .some((colorizeClass) => targetField.classList.contains(colorizeClass))) return;
+
+
+    let fieldDigit = Math.abs(+targetField.innerHTML);
+
+    multipleFieldConfirm = Number.isInteger(fieldDigit / 10);
+
+    let scoreIncrement = multipleFieldConfirm ? +fieldDigit : -fieldDigit;
+    Score_Initialize(scoreIncrement);
+
+
+
+    if (multipleFieldConfirm) multipleFieldCount++;
+    else targetField.innerHTML = -fieldDigit;
+
+    if (multipleFieldCount === multipleFieldsTotal) Refresh_Values(false, true);
+
+    targetField.classList.add(Colorize(fieldDigit, multipleFieldConfirm), "colorized")
+}
+
+
+function Iterator(ConditionFit) {
+    return ConditionFit ? 1 : -1;
+}
+
+
+
+let totalScore = 0;
+let previousScore = 0;
+
+let scoreIterator = 1;
+
+let scoreRunning = false;
+
+// function Score_Initialize(scoreIncrement, reset, iteration) {
+
+//     let increment = Math.abs(scoreIncrement);
+
+//     if (reset) iteration = Iterator(!(-increment > 0))
+
+//     let iterationSpeed = reset ? 0 : 7;
+
+//     if (scoreRunning) prevScore = nextScore;
+//     nextScore += scoreIncrement;
+//     // prevScore += scoreIncrement;
+//     // score.innerHTML = prevScore;
+
+//     scoreRunning = true;
+//     Set_Score();
+
+
+//     function Set_Score() {
+
+//         if (prevScore === nextScore) {
+//             scoreRunning = false;
+//             return;
+//         }
+//         prevScore += iteration;
+//         score.innerHTML = prevScore;
+
+//         setTimeout(Set_Score, iterationSpeed);
+//     }
+// }
+
+function Score_Initialize(increment, reset) {
+
+    previousScore = +score.innerHTML;
+    totalScore += increment;
+
+    if (reset) score.innerHTML = 0;
+    else Set_Score();
+
+    function Set_Score() {
+
+        iteration = Iterator(totalScore - previousScore > 0);
+
+        if (previousScore === totalScore) {
+            return;
+        }
+        previousScore += iteration;
+        score.innerHTML = previousScore;
+
+        setTimeout(Set_Score, 7);
+    }
+}
+
+
+
+
+let timeReset = false;
+
+function TimerInitialize(reset) {
+
+    let startTime = "01:00";
+
+
+    let sec = 60;
+
+    if (reset) {
+        timeReset = true;
+    } else Timer();
+
+    function Timer() {
+
+
+        if (timeReset || sec === 0) {
+            time.innerHTML = startTime;
+            Refresh_Values(false, false, false);
+            startButton.disabled = false;
+            return;
+        }
+
+        currentTime = "00" + ":" + sec;
+        time.innerHTML = currentTime;
+
+        sec -= 1;
+
+        setTimeout(Timer, 1000);
+    }
 }
 
 
@@ -191,8 +347,11 @@ function Scale(val) {
 
     fields.style.fontSize = val / 115 + "em";
 
-    Refresh_Width()
+    Set_Width()
 }
 
-Event_Click();
-Create_Values();
+
+
+
+Event_Read();
+Create_Fields();
