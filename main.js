@@ -180,7 +180,7 @@ function Refresh_Values(
         if (i > 99) return;
         else {
             i++;
-            setTimeout(Refresh, 0, fieldItems[i][0]);
+            setTimeout(Refresh, 5, fieldItems[i][0]);
         }
     }
 
