@@ -359,7 +359,7 @@ function TimerInitialize(reset) {
     let startTime = "01:00";
 
 
-    let sec = 5;
+    let sec = 59;
 
     if (reset) {
         timeReset = true;
