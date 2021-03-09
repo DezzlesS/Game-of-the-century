@@ -46,23 +46,25 @@ function Run() {
 
     startButton.disabled = true;
 
-    if (gamePlayed) Round();
-    else Refresh_Values(true, true, false);
+    Reset(true);
 
-    Score_Initialize(-totalScore, true);
-    TimerInitialize(true);
     // setTimeout(Refresh_Values, 200, true, true, false);
 
     timeReset = false;
     setTimeout(TimerInitialize, 1000, false);
 
-    gameLaunched = true;
     gamePlayed = false;
 }
 
-function Reset() {
+function Reset(launch) {
 
-    Refresh_Values(!gameLaunched, false, true);
+    if (launch) {
+        if (gamePlayed) Round();
+        else Refresh_Values(true, true, false);
+    } else Refresh_Values(false, false, true);
+
+    Score_Initialize(-totalScore, true);
+    TimerInitialize(true);
 
     // if (!gameLaunched) setTimeout(fieldsDisplayOff, 1500);
 
