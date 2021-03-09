@@ -16,6 +16,11 @@
 .field-item {
     width: 10%;
     display: flex;
+    visibility: hidden;
+    position: relative;
+    top: -350px;
+    right: -70px;
+    opacity: 0;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
@@ -26,12 +31,31 @@
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s ease;
+    /* transition: background 0.2s; */
+    /* transition: background 0.2s; */
 }
 
 .field-item:hover {
     font: bold 0.9em Calibri;
     border-color: black;
+}
+
+.field-item-show {
+    /* display: flex; */
+    visibility: visible;
+    opacity: 100;
+    top: 0;
+    left: 0;
+}
+
+.field-item-caption {
+    opacity: 0;
+    transition: opacity 0.5s ease 0.5s;
+}
+
+.field-item-show .field-item-caption {
+    opacity: 100;
 }
 
 .colorized {
@@ -53,19 +77,19 @@
 }
 
 .colorize-red {
-    background-color: #f37a61
+    background-color: #f37a61;
 }
 
 .colorize-yellow {
-    background-color: #ffe598
+    background-color: #ffe598;
 }
 
 .colorize-green {
-    background-color: #b5d89e
+    background-color: #b5d89e;
 }
 
 .colorize-white {
-    background-color: #dadada
+    background-color: #f4ffec;
 }
 
 .colorize-dark {
@@ -83,22 +107,22 @@
     background-color: #ff0000;
 }
 
-.colorize-active-max {
-    background-color: rgb(105, 177, 245);
+.colorize-max-active {
+    background-color: rgb(47, 154, 255);
 }
 
-.colorize-active-red:active {
-    background-color: #e4492b
+.colorize-red-active {
+    background-color: #ff5533;
 }
 
-.colorize-active-yellow:active {
-    background-color: #ece02f
+.colorize-yellow-active {
+    background-color: #ffc71e;
 }
 
-.colorize-active-green:active {
-    background-color: #6cd129
+.colorize-green-active {
+    background-color: #92da62;
 }
 
-.colorize-active-white:active {
-    background-color: #f1f1f1
+.colorize-white-active {
+    background-color: #b8ff86;
 }

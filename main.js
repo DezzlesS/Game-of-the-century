@@ -15,6 +15,9 @@ const time = document.querySelector(".time");
 let multipleFieldsTotal = 0;
 let multipleFieldCount = 0;
 
+let gamePlayed = false;
+
+
 
 
 
@@ -23,8 +26,11 @@ let multipleFieldCount = 0;
 function Event_Read() {
     addEventListener("mousedown", (e) => {
 
-        if (e.target.classList.contains("field-item")) Field_Click(e.target);
         if (e.target.classList.contains("reset")) Refresh_Values(false);
+        else if (!gamePlayed) {
+            if (e.target.classList.contains("field-item")) Field_Click(e.target);
+            if (e.target.classList.contains("field-item-caption")) Field_Click(e.target.parentNode);
+        }
     })
 }
 
@@ -40,23 +46,33 @@ function Run() {
 
     startButton.disabled = true;
 
-    Reset();
-
-    setTimeout(Refresh_Values, 600, true, true, false);
+    if (gamePlayed) Round();
+    else Refresh_Values(true, true, false);
+    // setTimeout(Refresh_Values, 200, true, true, false);
 
     timeReset = false;
     setTimeout(TimerInitialize, 1000, false);
+
+    gameLaunched = true;
+    gamePlayed = false;
 }
 
 function Reset() {
-    Refresh_Values(false, false, true)
+
+    Refresh_Values(!gameLaunched, false, true)
     Score_Initialize(-totalScore, true);
     TimerInitialize(true);
 
+    // if (!gameLaunched) setTimeout(fieldsDisplayOff, 1500);
+
+    gameLaunched = false;
 }
 
 
-
+function Round() {
+    setTimeout(Refresh_Values, 100, false, true, true);
+    setTimeout(Refresh_Values, 500, false, true, false);
+}
 
 
 
@@ -75,12 +91,18 @@ function Create_Fields() {
         for (let rowItem = 0; rowItem < 10; rowItem++) {
 
             fieldItem = document.createElement("div");
-            // fieldItem.className = "field-item";
+            fieldItem.className = "field-item";
             fieldRow.appendChild(fieldItem);
 
-            fieldItems[q] = [fieldItem, 0, 0];
+            fieldItemCaption = document.createElement("div");
+            fieldItemCaption.className = "field-item-caption";
+            fieldItem.appendChild(fieldItemCaption);
+
+            fieldItems[q] = [fieldItem, fieldItemCaption, 0, 0];
             q++;
+
         }
+
     }
     Set_Width();
 }
@@ -88,14 +110,16 @@ function Create_Fields() {
 // let timeOut1 = false;
 // let timeOut2 = false;
 
-function Refresh_Values(load, doRefreshValues, deleteValues) {
+function Refresh_Values(
+    load,
+    refreshValues,
+    deleteValues,
+) {
 
     // if (timeOut1) return;
     // timeOut1 = true;
 
-    let i1 = 0;
-    let i2 = 0;
-    let i3 = 0;
+    let i = 0;
 
     if (load) doRefreshValues = true;
 
@@ -108,17 +132,18 @@ function Refresh_Values(load, doRefreshValues, deleteValues) {
     function Refresh_Colorize(Field) {
 
         const Item = Field[0];
-        const ItemValue = load ? "" : Field[1];
-        const isMultiple = Field[2];
+        const ItemValue = load ? "" : Field[2];
+        const isMultiple = Field[3];
 
-        Item.classList.add(Colorize(ItemValue, isMultiple))
+        Item.classList.add(Colorize(ItemValue, isMultiple), "colorized")
 
-        if (i1 >= 99) {
+        if (i >= 99) {
+            i = 0;
             if (deleteValues) setTimeout(Delete, 300, fieldItems[0][0]);
-            else if (doRefreshValues) setTimeout(Refresh, 300, fieldItems[0][0]);
+            else if (refreshValues) setTimeout(Refresh, 70, fieldItems[0][0]);
         } else {
-            i1++;
-            Refresh_Colorize(fieldItems[i1]);
+            i++;
+            Refresh_Colorize(fieldItems[i]);
         }
     }
 
@@ -140,43 +165,40 @@ function Refresh_Values(load, doRefreshValues, deleteValues) {
 
         if (isMultipleOfTen) multipleFieldsTotal++;
 
-
-        Item.innerHTML = c;
-
-        fieldItems[i2][1] = c;
-        fieldItems[i2][2] = isMultipleOfTen;
+        fieldItems[i][1].innerHTML = c;
+        fieldItems[i][2] = c;
+        fieldItems[i][3] = isMultipleOfTen;
 
 
         let ItemLength = Item.classList.length
-        for (let i = 0; i < ItemLength; i++) {
+        for (let e = 0; e < ItemLength; e++) {
+            Item.classList.remove(Item.classList[0]);
+        }
+
+        Item.classList.add("field-item", "field-item-show");
+
+        if (i > 99) return;
+        else {
+            i++;
+            setTimeout(Refresh, 0, fieldItems[i][0]);
+        }
+    }
+
+    function Delete(Item) {
+
+        fieldItems[i][1].innerHTML = "";
+
+
+        let ItemLength = Item.classList.length
+        for (let e = 0; e < ItemLength; e++) {
             Item.classList.remove(Item.classList[0]);
         }
 
         Item.classList.add("field-item");
 
-        if (i2 > 99) return;
-        else {
-            i2++;
-            setTimeout(Refresh, 0, fieldItems[i2][0]);
-        }
-        // setTimeout(() => timeOut1 = false, 1000);
-        // setTimeout(() => timeOut2 = false, 1000);
-    }
-
-    function Delete(Item) {
-        Item.innerHTML = "";
-
-
-        let ItemLength = Item.classList.length
-        for (let i = 0; i < ItemLength; i++) {
-            Item.classList.remove(Item.classList[0]);
-        }
-
-        // Item.classList.add("field-item");
-
-        if (i3 > 99) return;
-        i3++;
-        setTimeout(Delete, 5, fieldItems[i3][0])
+        if (i > 99) return;
+        i++;
+        setTimeout(Delete, 5, fieldItems[i][0])
     }
 
 }
@@ -185,7 +207,7 @@ function Refresh_Values(load, doRefreshValues, deleteValues) {
 
 
 
-function Colorize(val, isMultiple) {
+function Colorize(val, isMultiple, active) {
 
     if (val === "") return "colorize-black";
     if (isMultiple || Number.isInteger(val / 10)) {
@@ -223,7 +245,10 @@ function Field_Click(targetField) {
         .some((colorizeClass) => targetField.classList.contains(colorizeClass))) return;
 
 
-    let fieldDigit = Math.abs(+targetField.innerHTML);
+
+
+    let fieldDigit = Math.abs(+targetField.firstChild.innerHTML);
+    console.log(fieldDigit);
 
     multipleFieldConfirm = Number.isInteger(fieldDigit / 10);
 
@@ -233,12 +258,28 @@ function Field_Click(targetField) {
 
 
     if (multipleFieldConfirm) multipleFieldCount++;
-    else targetField.innerHTML = -fieldDigit;
+    else targetField.firstChild.innerHTML = -fieldDigit;
 
-    if (multipleFieldCount === multipleFieldsTotal) Refresh_Values(false, true);
+    if (multipleFieldCount === multipleFieldsTotal) Round()
 
-    targetField.classList.add(Colorize(fieldDigit, multipleFieldConfirm), "colorized")
+    Click_Colorize();
+
+    function Click_Colorize() {
+
+        if (targetField.classList.contains("colorized")) return;
+
+        let colorize = Colorize(fieldDigit, multipleFieldConfirm)
+        let colorizeActive = colorize + "-active";
+
+        targetField.classList.add(colorize, colorizeActive, "colorized")
+
+        setTimeout(() => {
+            targetField.classList.remove(colorizeActive);
+        }, 180)
+    }
+
 }
+
 
 
 function Iterator(ConditionFit) {
@@ -308,7 +349,6 @@ function Score_Initialize(increment, reset) {
 
 
 
-
 let timeReset = false;
 
 function TimerInitialize(reset) {
@@ -316,7 +356,7 @@ function TimerInitialize(reset) {
     let startTime = "01:00";
 
 
-    let sec = 60;
+    let sec = 50;
 
     if (reset) {
         timeReset = true;
@@ -326,9 +366,13 @@ function TimerInitialize(reset) {
 
 
         if (timeReset || sec === 0) {
+
             time.innerHTML = startTime;
             Refresh_Values(false, false, false);
+
             startButton.disabled = false;
+            gamePlayed = true;
+
             return;
         }
 
