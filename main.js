@@ -48,6 +48,9 @@ function Run() {
 
     if (gamePlayed) Round();
     else Refresh_Values(true, true, false);
+
+    Score_Initialize(-totalScore, true);
+    TimerInitialize(true);
     // setTimeout(Refresh_Values, 200, true, true, false);
 
     timeReset = false;
@@ -59,9 +62,7 @@ function Run() {
 
 function Reset() {
 
-    Refresh_Values(!gameLaunched, false, true)
-    Score_Initialize(-totalScore, true);
-    TimerInitialize(true);
+    Refresh_Values(!gameLaunched, false, true);
 
     // if (!gameLaunched) setTimeout(fieldsDisplayOff, 1500);
 
@@ -356,7 +357,7 @@ function TimerInitialize(reset) {
     let startTime = "01:00";
 
 
-    let sec = 50;
+    let sec = 5;
 
     if (reset) {
         timeReset = true;
