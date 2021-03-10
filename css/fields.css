@@ -1,4 +1,7 @@
 .fields {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
     width: 100%;
     padding: 3%;
     background-color: #161616;
@@ -14,24 +17,48 @@
 }
 
 .field-item {
-    width: 10%;
     display: flex;
+    flex: 100%;
+    position: relative;
+    top: -350px;
+    left: -200px;
+    opacity: 0;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    padding-top: 0.5%;
+    padding: 0.5%;
     margin: 1px;
     background-color: white;
     border: 3px solid transparent;
     border-radius: 5px;
     text-align: center;
+    visibility: hidden;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s ease;
+    /* transition: background 0.2s; */
+    /* transition: background 0.2s; */
 }
 
 .field-item:hover {
     font: bold 0.9em Calibri;
     border-color: black;
+}
+
+.field-item-show {
+    /* display: flex; */
+    visibility: visible;
+    opacity: 100;
+    top: 0;
+    left: 0;
+}
+
+.field-item-caption {
+    opacity: 0;
+    transition: opacity 0.5s ease 0.5s;
+}
+
+.field-item-show .field-item-caption {
+    opacity: 100;
 }
 
 .colorized {
@@ -40,7 +67,7 @@
 }
 
 .colorized:hover {
-    border-style: none;
+    border-color: transparent;
     font-size: 1em;
 }
 
@@ -53,19 +80,19 @@
 }
 
 .colorize-red {
-    background-color: #f37a61
+    background-color: #f37a61;
 }
 
 .colorize-yellow {
-    background-color: #ffe598
+    background-color: #ffe598;
 }
 
 .colorize-green {
-    background-color: #b5d89e
+    background-color: #b5d89e;
 }
 
 .colorize-white {
-    background-color: #dadada
+    background-color: #eaffdb;
 }
 
 .colorize-dark {
@@ -83,24 +110,22 @@
     background-color: #ff0000;
 }
 
-
-/* 
-.colorize-max:active {
-    background-color: rgb(105, 177, 245);
+.colorize-max-active {
+    background-color: rgb(47, 154, 255);
 }
 
-.colorize-red:active {
-    background-color: #c54c34
+.colorize-red-active {
+    background-color: #ff5533;
 }
 
-.colorize-yellow:active {
-    background-color: #e2bb45
+.colorize-yellow-active {
+    background-color: #ffc71e;
 }
 
-.colorize-green:active {
-    background-color: #70a54d
+.colorize-green-active {
+    background-color: #92da62;
 }
 
-.colorize-white:active {
-    background-color: #aaaaaa
-} */
+.colorize-white-active {
+    background-color: #b8ff86;
+}

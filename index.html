@@ -15,35 +15,38 @@
 
 
 <body>
-    <div class="top-Border">
-    </div>
-    <div class="main-wrapper">
-        <div class="time-wrapper">
-            <section class="time">
-                <span class="minutes">00</span> :
-                <span class="seconds">00</span>
-            </section>
+    <div class="global-wrapper">
+        <div class="top-Border">
         </div>
-        <div class="main">
-            <section class="main-left-side">
-                <div class="fields"></div>
-            </section>
-            <section class="main-right-side">
-                <div class="info score-wrapper">
-                    <div class="info-caption score-caption">Счёт:&nbsp;</div>
-                    <div class="info-number score-number"></div>
-                </div>
-                <div class="info next-refresh-wrapper">
-                    <div class="next-refresh-caption">Обновление</div>
-                    <button class="main-right-side-button start">Старт</button>
-                    <button class="main-right-side-button refresh" onclick="Refresh_Values">Обновить</button>
-                    <div class="next-refresh"></div>
-                </div>
-            </section>
+        <div class="main-wrapper">
+            <div class="time-wrapper">
+                <section class="time">
+                    <span class="minutes"></span>
+                    <span class="seconds"></span>
+                </section>
+            </div>
+            <div class="main">
+                <section class="main-left-side">
+                    <div class="fields"></div>
+                </section>
+                <section class="main-right-side">
+                    <div class="info score-wrapper">
+                        <div class="info-caption score-caption">Счёт:&nbsp;</div>
+                        <div class="info-number score-number">0</div>
+                    </div>
+                    <div class="info next-refresh-wrapper">
+                        <!-- <div class="next-refresh-caption">Обновление</div> -->
+                        <button class="main-right-side-button start" onclick="Run()">Играть</button>
+                        <!-- <button class="main-right-side-button refresh" onclick="Refresh_Values(false,true)">Обновить</button> -->
+                        <button class="main-right-side-button reset" onclick="Reset()">Сброс</button>
+                        <div class="next-refresh"></div>
+                    </div>
+                </section>
+            </div>
         </div>
-    </div>
-    <div class="bottom-Border">
-        <input type="range" class="scale" min="60" max="100" value="100" step="10" onmouseup="Scale(value)">
+        <div class="bottom-Border">
+            <input type="range" class="scale" min="60" max="100" value="100" step="10" onmouseup="Scale(value)">
+        </div>
     </div>
 </body>
 <script src="main.js"></script>

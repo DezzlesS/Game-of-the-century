@@ -1,8 +1,8 @@
 .main-wrapper {
     width: 45%;
-    height: 70%;
+    height: 72%;
     position: relative;
-    padding: 15px 25px;
+    padding: 25px;
     margin: 2.5% auto 0 auto;
     background-color: rgb(10, 10, 10);
     border: 2px solid black;
@@ -12,18 +12,17 @@
 
 .main {
     display: flex;
-    height: 80%;
+    height: 85%;
 }
 
 .main-left-side {
     display: flex;
-    width: 70%;
+    width: 75%;
     align-items: center;
-    justify-content: center;
 }
 
 .main-right-side {
-    width: 30%;
+    width: 25%;
     padding: 40px 0;
     margin: 0 0 auto 20px;
     background-color: #161616;
