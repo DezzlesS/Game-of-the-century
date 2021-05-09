@@ -40,7 +40,7 @@
 }
 
 .colorized:hover {
-    border-style: none;
+    border-color: transparent;
     font-size: 1em;
 }
 
@@ -83,24 +83,22 @@
     background-color: #ff0000;
 }
 
-
-/* 
-.colorize-max:active {
+.colorize-active-max {
     background-color: rgb(105, 177, 245);
 }
 
-.colorize-red:active {
-    background-color: #c54c34
+.colorize-active-red:active {
+    background-color: #e4492b
 }
 
-.colorize-yellow:active {
-    background-color: #e2bb45
+.colorize-active-yellow:active {
+    background-color: #ece02f
 }
 
-.colorize-green:active {
-    background-color: #70a54d
+.colorize-active-green:active {
+    background-color: #6cd129
 }
 
-.colorize-white:active {
-    background-color: #aaaaaa
-} */
+.colorize-active-white:active {
+    background-color: #f1f1f1
+}
